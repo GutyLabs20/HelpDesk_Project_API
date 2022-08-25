@@ -16,6 +16,7 @@ class CategoriaController extends Controller
     public function index()
     {
         //
+        return "hola a todos";
     }
 
     /**
