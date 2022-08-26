@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoriaResource;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoriaController extends Controller
 {
@@ -15,8 +17,13 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
-        return "hola a todos";
+        // $categorias = DB::table('categorias')
+        $categorias = Categoria::included()
+            ->filter()
+            ->sort()
+            ->getOrPaginate()
+            ->where('activo', '1');
+        return CategoriaResource::collection($categorias);
     }
 
     /**
@@ -27,7 +34,14 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|max:255',
+            'descripcion' => 'required|max:255',
+            'slug' => 'required|max:255|unique:categorias'
+        ]);
+        $categoria = Categoria::create($request->all());
+
+        return CategoriaResource::make($categoria);
     }
 
     /**
@@ -36,9 +50,10 @@ class CategoriaController extends Controller
      * @param  \App\Models\Categoria  $categoria
      * @return \Illuminate\Http\Response
      */
-    public function show(Categoria $categoria)
+    public function show($id)
     {
-        //
+        $categoria = Categoria::included()->findOrFail($id);
+        return CategoriaResource::make($categoria);
     }
 
     /**
@@ -50,7 +65,14 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, Categoria $categoria)
     {
-        //
+        $request->validate([
+            'nombre' => 'required|max:255',
+            'descripcion' => 'required|max:255',
+            'slug' => 'required|max:255|unique:categorias,slug,'. $categoria->id
+        ]);
+        $categoria->update($request->all());
+
+        return CategoriaResource::make($categoria);
     }
 
     /**
@@ -61,6 +83,8 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
-        //
+        $categoria->activo = '0';
+        $categoria->save();
+        return CategoriaResource::make($categoria);
     }
 }

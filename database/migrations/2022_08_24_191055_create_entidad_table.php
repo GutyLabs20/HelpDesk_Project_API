@@ -18,6 +18,7 @@ class CreateEntidadTable extends Migration
             $table->string('tipo_doc', 20);
             $table->string('nro_doc', 15);
             $table->string('nombre', 250);
+            $table->string('slug')->unique()->nullable();
             $table->string('descripcion', 250)->nullable();
             $table->string('logotipo', 250)->nullable();
             $table->string('telefono', 250)->nullable();

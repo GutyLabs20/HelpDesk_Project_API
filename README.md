@@ -22,6 +22,9 @@ API project for Help Desk - Support
 - Controllers
     > php artisan make:controller Api/NameController --api --model=NameModel
 
+- Resource
+    > php artisan make:resource NameResource
+
 
 <!-- - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).

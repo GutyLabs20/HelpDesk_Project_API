@@ -17,6 +17,7 @@ class CreateTipousuariosTable extends Migration
             $table->id();
             $table->string('nombre', 50);
             $table->string('descripcion', 100);
+            $table->string('slug')->unique()->nullable();
             $table->string('activo', 1)->default(1);
             $table->timestamps();
         });
